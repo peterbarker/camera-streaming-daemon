@@ -56,7 +56,13 @@ std::string GstreamerPipelineBuilder::create_caps(std::map<std::string, std::str
 {
     std::stringstream ss;
     std::string width, height;
-    ss << "capsfilter caps=\"video/x-raw";
+    std::string fmt = "video/x-raw";
+
+    if (params["fmt"] != "") {
+        fmt = params["fmt"];
+    }
+
+    ss << "capsfilter caps=\"" << fmt;
 
     width = params["width"];
     height = params["height"];
@@ -67,6 +73,11 @@ std::string GstreamerPipelineBuilder::create_caps(std::map<std::string, std::str
         ss << ", height=";
         ss << height;
     }
+
+    if (params["framerate"] != "") {
+        ss << ", framerate=" << params["framerate"];
+    }
+
     ss << "\"";
 
     return ss.str();
